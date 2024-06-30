@@ -47,14 +47,17 @@ quaternion quaternion::operator/(float f) const
 
 vector3 quaternion::operator*(const vector3& v) const
 {
-	// todo: 実装して下さい
-	return vector3();
+	quaternion q = *this * quaternion(v.x(), v.y(), v.z(), 1.0f) * this->conjugate();
+	return vector3(q.x(), q.y(), q.z());
 }
 
 quaternion quaternion::operator*(const quaternion& rhs) const
 {
-	// todo: 実装して下さい
-	return quaternion();
+	return quaternion(
+		w_ * rhs.x_ + rhs.w_ * x_ + y_ * rhs.z_ - z_ * rhs.y_,
+		w_ * rhs.y_ + rhs.w_ * y_ + z_ * rhs.x_ - x_ * rhs.z_,
+		w_ * rhs.z_ + rhs.w_ * z_ + x_ * rhs.y_ - y_ * rhs.x_,
+		w_* rhs.w_ - x_ * rhs.x_ - y_ * rhs.y_ - z_ * rhs.z_);
 }
 
 quaternion quaternion::operator+(const quaternion& rhs) const
@@ -66,14 +69,17 @@ quaternion quaternion::operator+(const quaternion& rhs) const
 // 単位元にする
 quaternion &quaternion::identity()
 {
-	// todo: 実装して下さい
+	this->x_ = 0.0f;
+	this->y_ = 0.0f;
+	this->z_ = 0.0f;
+	this->w_ = 1.0f;
 	return *this;
 }
 
 // 正規化する
 quaternion &quaternion::normalize()
 {
-	// todo: 実装して下さい
+	*this = *this / std::sqrt(length_sq());
 	return *this;
 }
 
@@ -86,21 +92,21 @@ float quaternion::length_sq() const
 // 共役を返す
 quaternion quaternion::conjugate() const
 {
-	// todo: 実装して下さい
-	return quaternion();
+	return quaternion(-x_, -y_, -z_, w_);
 }
 
 // 逆元を返す
 quaternion quaternion::inverse() const
 {
-	// todo: 実装して下さい
-	return quaternion();
+	return this->conjugate() / this->length_sq();
 }
 
 // 球面線形補間
 quaternion quaternion::slerp(const quaternion& q0, const quaternion& q1, float t)
 {
-	// todo: 実装して下さい
-	return quaternion();
+	float theta = acosf(q0.x_ * q1.x_ + q0.y_ * q1.y_ + q0.z_ * q1.z_ + q0.w_ * q1.w_);
+	if (theta * theta < 0.00000001f) return q0;// 発散を避ける
+	float n = 1.0f / sinf(theta);
+	return q0 * (sinf((1.0f - t) * theta) * n) + q1 * (sinf(t * theta) * n);
 }
 
