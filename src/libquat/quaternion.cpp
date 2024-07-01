@@ -73,7 +73,11 @@ quaternion &quaternion::identity()
 // 正規化する
 quaternion &quaternion::normalize()
 {
-	// todo: 実装して下さい
+	float norm = sqrt(length_sq());
+	x_ /= norm;
+	y_ /= norm;
+	z_ /= norm;
+	w_ /= norm;
 	return *this;
 }
 
