@@ -73,7 +73,7 @@ quaternion &quaternion::identity()
 // 正規化する
 quaternion &quaternion::normalize()
 {
-	float norm = sqrt(length_sq());
+	const float norm = sqrt(length_sq());
 	x_ /= norm;
 	y_ /= norm;
 	z_ /= norm;
@@ -90,15 +90,14 @@ float quaternion::length_sq() const
 // 共役を返す
 quaternion quaternion::conjugate() const
 {
-	// todo: 実装して下さい
-	return quaternion();
+	return quaternion(-x_, -y_, -z_, w_);
 }
 
 // 逆元を返す
 quaternion quaternion::inverse() const
 {
-	// todo: 実装して下さい
-	return quaternion();
+	const float lsq = length_sq();
+	return conjugate() / lsq;
 }
 
 // 球面線形補間
