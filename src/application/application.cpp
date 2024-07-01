@@ -10,13 +10,13 @@
 int main()
 {
 	const float PI = 3.1415926535f;
+	quaternion q0(vector3(1.0f, 0.0f, 0.0f), 1.0f * PI);// x軸周りの180度回転
+	float t = 0.5f;// 真ん中
+	quaternion qt = quaternion::slerp(q0, q0, t);
 
-	vector3 axis(1.0f, 1.0f, 1.0f);
-	quaternion q(axis.normalize(), 2.0f * PI / 3.0f);// 軸の入れ替え
-
-	vector3 v(1.0f, 0.0f, 0.0f);
-	v = q * v;
-
+	// 生成したクオータニオンで変換
+	vector3 z1(0.0f, 0.0f, 1.0f);
+	vector3 v = qt * z1;
     std::cout << "(x,y,z)=(" << v.x() << ", "<< v.y() << ", "<< v.z() << ")" << std::endl;
 
     system("PAUSE");
