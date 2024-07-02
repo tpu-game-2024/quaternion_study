@@ -118,10 +118,8 @@ quaternion quaternion::inverse() const
 
 // 球面線形補間
 quaternion quaternion::slerp(const quaternion& q0, const quaternion& q1, float t) {
-	// q0 と q1 の間のコサイン角度を計算
 	float dot = q0.x_ * q1.x_ + q0.y_ * q1.y_ + q0.z_ * q1.z_ + q0.w_ * q1.w_;
 
-	// コサイン角度が1に非常に近い場合、補間ではなく線形補間を使用
 	if (fabs(dot) > 0.9995) {
 		return (q0 * (1 - t) + q1 * t).normalize();
 	}
@@ -130,11 +128,9 @@ quaternion quaternion::slerp(const quaternion& q0, const quaternion& q1, float t
 	float theta = acos(dot);
 	float sin_theta = sin(theta);
 
-	// 四元数を補間
 	float s0 = sin((1 - t) * theta) / sin_theta;
 	float s1 = sin(t * theta) / sin_theta;
 
-	// 補間された四元数を返す
 	quaternion q0s = q0 * s0;
 	quaternion q1s = q1 * s1;
 	return quaternion(
