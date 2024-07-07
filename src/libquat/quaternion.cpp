@@ -51,23 +51,23 @@ quaternion quaternion::operator/(float f) const
 
 vector3 quaternion::operator*(const vector3& v) const
 {
-	const quaternion qv(0, v.x(), v.y(), v.z());
-	const quaternion res = qv * *this * this->conjugate();
-	return vector3(res.x_, res.y_, res.z_);
+	const quaternion qv(v.x(), v.y(), v.z(), 1.0f);
+	const quaternion res = *this * qv * this->conjugate();
+	return vector3(res.x(), res.y(), res.z());
 }
 
 quaternion quaternion::operator*(const quaternion& rhs) const
 {
-	const float x = w_ * rhs.x_ + x_ * rhs.w_ + y_ * rhs.z_ - z_ * rhs.y_;
-	const float y = w_ * rhs.y_ - x_ * rhs.z_ + y_ * rhs.w_ + z_ * rhs.x_;
-	const float z = w_ * rhs.z_ + x_ * rhs.y_ - y_ * rhs.x_ + z_ * rhs.w_;
-	const float w = w_ * rhs.w_ - x_ * rhs.x_ - y_ * rhs.y_ - z_ * rhs.z_;
+	const float x = w_ * rhs.x() + x_ * rhs.w() + y_ * rhs.z() - z_ * rhs.y();
+	const float y = w_ * rhs.y() - x_ * rhs.z() + y_ * rhs.w() + z_ * rhs.x();
+	const float z = w_ * rhs.z() + x_ * rhs.y() - y_ * rhs.x() + z_ * rhs.w();
+	const float w = w_ * rhs.w() - x_ * rhs.x() - y_ * rhs.y() - z_ * rhs.z();
 	return quaternion(x, y, z, w);
 }
 
 quaternion quaternion::operator+(const quaternion& rhs) const
 {
-	return quaternion(x_ + rhs.x_, y_ + rhs.y_, z_ + rhs.z_, w_ + rhs.w_);
+	return quaternion(x_ + rhs.x(), y_ + rhs.y(), z_ + rhs.z(), w_ + rhs.w());
 }
 
 
@@ -118,25 +118,18 @@ quaternion quaternion::inverse() const
 
 // 球面線形補間
 quaternion quaternion::slerp(const quaternion& q0, const quaternion& q1, float t) {
-	float dot = q0.x_ * q1.x_ + q0.y_ * q1.y_ + q0.z_ * q1.z_ + q0.w_ * q1.w_;
+	const float dot = q0.x() * q1.x() + q0.y() * q1.y() + q0.z() * q1.z() + q0.w() * q1.w();
 
 	if (fabs(dot) > 0.9995) {
 		return (q0 * (1 - t) + q1 * t).normalize();
 	}
 
 	// theta および sin(theta) の計算
-	float theta = acos(dot);
-	float sin_theta = sin(theta);
+	const float theta = acos(dot);
+	const float sin_theta = sin(theta);
 
-	float s0 = sin((1 - t) * theta) / sin_theta;
-	float s1 = sin(t * theta) / sin_theta;
-
-	quaternion q0s = q0 * s0;
-	quaternion q1s = q1 * s1;
-	return quaternion(
-		s0 * q0.x_ + s1 * q1.x_,
-		s0 * q0.y_ + s1 * q1.y_,
-		s0 * q0.z_ + s1 * q1.z_,
-		s0 * q0.w_ + s1 * q1.w_
-	).normalize();
+	const float s0 = sin((1 - t) * theta) / sin_theta;
+	const float s1 = sin(t * theta) / sin_theta;
+	
+	return q0 * s0 + q1 * s1;
 }
