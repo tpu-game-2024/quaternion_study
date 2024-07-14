@@ -132,7 +132,28 @@ quaternion quaternion::inverse() const
 // 球面線形補間
 quaternion quaternion::slerp(const quaternion& q0, const quaternion& q1, float t)
 {
-	// todo: 実装して下さい
-	return quaternion();
+	const float dot = q0.x() * q1.x() + q0.y() * q1.y() + q0.z() * q1.z() + q0.w() * q1.w();
+
+	//全てが逆のQuaternionは符号を逆にして扱う
+	if (dot < -0.9999)
+	{
+		const quaternion q1_ = quaternion(-q1.x(), -q1.y(), -q1.z(), -q1.w());
+		return slerp(q0, q1_, t);
+	}
+
+	//ほぼ同じ方向の場合は近似する
+	if (dot > 0.9999)
+	{
+		return quaternion(q0 * (1.0f - t) + q1 * t).normalize();
+	}
+
+	const float theta = acos(dot);
+	const float sint = sin(theta);
+
+	const float s0 = sin((1 - t) * theta) / sint;
+	const float s1 = sin(t * theta) / sint;
+
+	return q0 * s0 + q1 * s1;
+
 }
 
