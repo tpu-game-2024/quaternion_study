@@ -95,15 +95,15 @@ float quaternion::length_sq() const
 // 共役を返す
 quaternion quaternion::conjugate() const
 {
-	// todo: 実装して下さい
-	return quaternion();
+	return quaternion(-x_, -y_, -z_, w_);
 }
 
 // 逆元を返す
 quaternion quaternion::inverse() const
 {
-	// todo: 実装して下さい
-	return quaternion();
+	const float length = length_sq();
+
+	return conjugate() / length;
 }
 
 // 球面線形補間
