@@ -47,14 +47,37 @@ quaternion quaternion::operator/(float f) const
 
 vector3 quaternion::operator*(const vector3& v) const
 {
-	// todo: 実装して下さい
-	return vector3();
+	//項を事前に計算する
+	const float tx = 2.0f * v.x();
+	const float ty = 2.0f * v.y();
+	const float tz = 2.0f * v.z();
+	const float ww = w_ * w_;
+	const float xx = x_ * x_;
+	const float yy = y_ * y_;
+	const float zz = z_ * z_;
+	const float xy = x_ * y_;
+	const float wz = w_ * z_;
+	const float wy = w_ * y_;
+	const float xz = x_ * z_;
+	const float yz = y_ * z_;
+	const float wx = w_ * x_;
+
+	//ベクトルとかける
+	const float rx = v.x() * (ww + xx - yy - zz) + ty * (xy - wz) + tz * (wy + xz);
+	const float ry = tx * (xy + wz) + v.y() * (ww - xx + yy - zz) + tz * (yz - wx);
+	const float rz = tx * (xz - wy) + ty * (wx + yz) + v.z() * (ww - xx - yy + zz);
+
+	return vector3(rx, ry, rz);
 }
 
 quaternion quaternion::operator*(const quaternion& rhs) const
 {
-	// todo: 実装して下さい
-	return quaternion();
+	return quaternion(
+		w_ * rhs.w() - x_ * rhs.x() - y_ * rhs.y() - z_ * rhs.z(),
+		w_ * rhs.x() + x_ * rhs.w() + y_ * rhs.z() - z_ * rhs.y(),
+		w_ * rhs.y() - x_ * rhs.z() + y_ * rhs.w() + z_ * rhs.x(),
+		w_ * rhs.z() + x_ * rhs.y() - y_ * rhs.x() + z_ * rhs.w()
+	);
 }
 
 quaternion quaternion::operator+(const quaternion& rhs) const
