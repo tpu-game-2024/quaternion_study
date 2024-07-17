@@ -92,14 +92,16 @@ float quaternion::length_sq() const
 quaternion quaternion::conjugate() const
 {
 	// todo: 実装して下さい
-	return quaternion();
+	quaternion q = quaternion(this->x() * -1, this->y() * -1, this->z() * -1, this->w());
+	return q;
 }
 
 // 逆元を返す
 quaternion quaternion::inverse() const
 {
 	// todo: 実装して下さい
-	return quaternion();
+	quaternion q = this->conjugate() / length_sq();
+	return q;
 }
 
 // 球面線形補間
