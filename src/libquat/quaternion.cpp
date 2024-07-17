@@ -78,6 +78,7 @@ quaternion &quaternion::identity()
 quaternion &quaternion::normalize()
 {
 	// todo: 実装して下さい
+	*this = *this / sqrt(length_sq());
 	return *this;
 }
 
