@@ -67,6 +67,10 @@ quaternion quaternion::operator+(const quaternion& rhs) const
 quaternion &quaternion::identity()
 {
 	// todo: 実装して下さい
+	x_ = 0.0f;
+	y_ = 0.0f;
+	z_ = 0.0f;
+	w_ = 1.0f;
 	return *this;
 }
 
