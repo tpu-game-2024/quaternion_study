@@ -48,13 +48,22 @@ quaternion quaternion::operator/(float f) const
 vector3 quaternion::operator*(const vector3& v) const
 {
 	// todo: 実装して下さい
-	return vector3();
+	quaternion veq = quaternion(v.x(), v.y(), v.z(), 0);
+	quaternion qq = *this * veq;
+	quaternion q = qq * this->inverse();
+	return vector3(q.x(), q.y(), q.z());
 }
 
 quaternion quaternion::operator*(const quaternion& rhs) const
 {
 	// todo: 実装して下さい
-	return quaternion();
+	quaternion q = quaternion(
+		 this->w()*rhs.x() - this->z()*rhs.y() + this->y()*rhs.z() + this->x()*rhs.w(),
+		 this->z()*rhs.x() + this->w()*rhs.y() - this->x()*rhs.z() + this->y()*rhs.w(),
+		-this->y()*rhs.x() + this->x()*rhs.y() + this->w()*rhs.z() + this->z()*rhs.w(),
+		-this->x()*rhs.x() - this->y()*rhs.y() - this->z()*rhs.z() + this->w()*rhs.w()
+		);
+	return q;
 }
 
 quaternion quaternion::operator+(const quaternion& rhs) const
