@@ -71,6 +71,11 @@ quaternion quaternion::operator+(const quaternion& rhs) const
 	return quaternion(x_ + rhs.x_, y_ + rhs.y_, z_ + rhs.z_, w_ + rhs.w_);
 }
 
+float quaternion::dot(const quaternion& lhs, const quaternion& rhs) const
+{
+	return lhs.x()*rhs.x() + lhs.y()*rhs.y() + lhs.z()*rhs.z() + lhs.w()*rhs.w();
+}
+
 
 // 単位元にする
 quaternion &quaternion::identity()
@@ -117,6 +122,8 @@ quaternion quaternion::inverse() const
 quaternion quaternion::slerp(const quaternion& q0, const quaternion& q1, float t)
 {
 	// todo: 実装して下さい
-	return quaternion();
+	float theta = quaternion().dot(q0, q1);
+	quaternion q = q0 * (sinf((1 - t) * theta) / sinf(theta)) + q1 * (sinf(t * theta) / sinf(theta));
+	return q;
 }
 

@@ -50,6 +50,8 @@ public:
 	vector3 operator * (const vector3& rhs) const;
 	quaternion operator * (const quaternion& rhs) const;
 
+	float dot(const quaternion& lhs, const quaternion& rhs) const;	// 内積
+
 	// 変換
 	quaternion &identity();// 単位元にする（返り値は自分自身）
 	quaternion &normalize();// 正規化する（返り値は自分自身）
