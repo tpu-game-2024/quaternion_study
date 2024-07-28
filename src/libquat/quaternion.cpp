@@ -75,7 +75,7 @@ quaternion &quaternion::normalize()
 {
 	// todo: 実装して下さい
 	float num = sqrt(length_sq());
-	return *this = quaternion(x_ / num, y_ / num, z_ / num, w_ / num);
+	return *this = *this / num;
 }
 
 // 大きさの2乗
