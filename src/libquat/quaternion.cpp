@@ -74,8 +74,8 @@ quaternion &quaternion::identity()
 quaternion &quaternion::normalize()
 {
 	// todo: 実装して下さい
-	float num = sqrt(length_sq());
-	return *this = *this / num;
+	float scalar = sqrt(length_sq());
+	return *this = *this / scalar;
 }
 
 // 大きさの2乗
@@ -88,14 +88,16 @@ float quaternion::length_sq() const
 quaternion quaternion::conjugate() const
 {
 	// todo: 実装して下さい
-	return quaternion();
+	return quaternion(-x_,-y_,-z_ ,w_);
 }
 
 // 逆元を返す
 quaternion quaternion::inverse() const
 {
 	// todo: 実装して下さい
-	return quaternion();
+	float norm = length_sq();
+	quaternion con = conjugate();
+	return con / norm;
 }
 
 // 球面線形補間
