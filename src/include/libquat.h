@@ -54,6 +54,8 @@ public:
 	quaternion &identity();// 単位元にする（返り値は自分自身）
 	quaternion &normalize();// 正規化する（返り値は自分自身）
 
+
+
 	// 生成
 	quaternion inverse() const; // 逆元を返す
 	static quaternion slerp(const quaternion &q0, const quaternion &q1, float t);// 球面線形補間
