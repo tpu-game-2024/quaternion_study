@@ -67,14 +67,15 @@ quaternion quaternion::operator+(const quaternion& rhs) const
 quaternion &quaternion::identity()
 {
 	// todo: 実装して下さい
-	return *this;
+	return *this = quaternion::quaternion();
 }
 
 // 正規化する
 quaternion &quaternion::normalize()
 {
 	// todo: 実装して下さい
-	return *this;
+	float num = sqrt(length_sq());
+	return *this = quaternion(x_ / num, y_ / num, z_ / num, w_ / num);
 }
 
 // 大きさの2乗
