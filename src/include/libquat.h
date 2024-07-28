@@ -59,6 +59,7 @@ public:
 	// 生成
 	quaternion inverse() const; // 逆元を返す
 	static quaternion slerp(const quaternion &q0, const quaternion &q1, float t);// 球面線形補間
+	static quaternion lerp(const quaternion& q0, const quaternion& q1, float t);// 線形補間
 };
 
 

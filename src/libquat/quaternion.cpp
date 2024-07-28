@@ -107,21 +107,46 @@ quaternion quaternion::inverse() const
 	return con / norm;
 }
 
+//線形補間
+quaternion quaternion::lerp(const quaternion& q0, const quaternion& q1, float t)
+{
+	//LERP(A,B,t) = (1 − t)A + tB = t(-A + B)+ A
+	float x = t * (q1.x_ - q0.x_) + q0.x_;
+	float y = t * (q1.y_ - q0.y_) + q0.y_;
+	float z = t * (q1.z_ - q0.z_) + q0.z_;
+	float w = t * (q1.w_ - q0.w_) + q0.w_;
+	return quaternion(x, y, z, w).normalize();
+}
+
 // 球面線形補間
 quaternion quaternion::slerp(const quaternion& q0, const quaternion& q1, float t)
 {
+	// todo: 実装して下さい
+
 	quaternion q1_conjugate = q1.conjugate();
+
 	// 二つのクォータニオンの内積を返す
 	float dot_product = q0.x_ * q1.x_ + q0.y_ * q1.y_ + q0.z_ * q1.z_ + q0.w_ * q1.w_;
+	//もし同じ値ならば内積が1,arccosが0,sin(theta)も0になり0で除算することになる
+	if (dot_product == 1.0f) 
+	{	
+		//slerpの実行による補間の必要がないため、q0を返す 
+		return q0;
 
-	float theta = acos(dot_product);
-	float sin_theta = sin(theta);
+		// 限りなく1に近い時の対策としてlerp(線形補間)を行う。
+		//return lerp(q0,q1,t);
+	}
+	else 
+	{
+		float theta = acos(dot_product);
+		float sin_theta = sin(theta);
 
-	float w = (sin((1 - t) * theta) / sin_theta) * q0.w_ + (sin(t * theta) / sin_theta) * q1.w_;
-	float x = (sin((1 - t) * theta) / sin_theta) * q0.x_ + (sin(t * theta) / sin_theta) * q1.x_;
-	float y = (sin((1 - t) * theta) / sin_theta) * q0.y_ + (sin(t * theta) / sin_theta) * q1.y_;
-	float z = (sin((1 - t) * theta) / sin_theta) * q0.z_ + (sin(t * theta) / sin_theta) * q1.z_;
+		float w = (sin((1 - t) * theta) / sin_theta) * q0.w_ + (sin(t * theta) / sin_theta) * q1.w_;
+		float x = (sin((1 - t) * theta) / sin_theta) * q0.x_ + (sin(t * theta) / sin_theta) * q1.x_;
+		float y = (sin((1 - t) * theta) / sin_theta) * q0.y_ + (sin(t * theta) / sin_theta) * q1.y_;
+		float z = (sin((1 - t) * theta) / sin_theta) * q0.z_ + (sin(t * theta) / sin_theta) * q1.z_;
 
-	return quaternion(x, y, z, w).normalize();
+		return quaternion(x, y, z, w).normalize();
+	}	
 }
 
